@@ -8,26 +8,23 @@ import csv
 from mako.template import Template
 from mako.runtime import Context
 
-def main(t_file, m_file, i_files, o_path):
+def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
     template = Template(filename=t_file, format_exceptions=True)
 
-    content = {}
-
-    #template = prog.sub('', template)
     outfiles = {}
 
     with open(m_file, 'r') as f:
         reader = csv.DictReader(f, delimiter=',', quotechar='"')
         #main_data_vars = reader.fieldnames
         for row in reader:
-            outfiles[row['id']] = [row['title'], template.render_unicode(**row)]
+            outfiles[row[id_col]] = [row[title_col], template.render_unicode(**row)]
 
         for file_id, file_array in outfiles.items():
             with open(o_path + '/' + file_array[0].replace('/', '_') + '.html', 'w') as f:
                 f.write(file_array[1])
 
 if __name__ == __name__:
-    parser = argparse.ArgumentParser(description='Fill templated based off spreadsheets.')
+    parser = argparse.ArgumentParser(description='Fill template based off spreadsheets.')
     parser.add_argument('-t', '--template', dest='template', required=True)
     parser.add_argument('-m', '--main-data', dest='main', required=True)
     parser.add_argument('-o', '--out-path', dest='out', required=True)
