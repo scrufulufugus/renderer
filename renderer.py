@@ -5,27 +5,13 @@ import re
 import sys
 import argparse
 import csv
+from mako.template import Template
+from mako.runtime import Context
 
 def main(t_file, m_file, i_files, o_path):
-    with open(t_file, 'r') as f:
-        template = f.read()
+    template = Template(filename=t_file, format_exceptions=True)
 
     content = {}
-
-    for item in i_files:
-        prog = re.compile(r'(?<=<!--#\+BEGIN:\sitems-->).+(?=<!--#\+END:\sitems-->)', flags=re.I|re.M|re.S)
-        match = prog.search(template)
-        if match:
-            template = prog.sub(' ', template)
-        else:
-            break
-        sub_template = match.group(0)
-        with open(item, 'r') as f:
-            reader = csv.DictReader(f, delimiter=',', quotechar='"')
-            for row in reader:
-                if row["id"] not in content:
-                    content[row["id"]] = []
-                content[row["id"]].append(replaceKeys(sub_template, row))
 
     #template = prog.sub('', template)
     outfiles = {}
@@ -34,21 +20,11 @@ def main(t_file, m_file, i_files, o_path):
         reader = csv.DictReader(f, delimiter=',', quotechar='"')
         #main_data_vars = reader.fieldnames
         for row in reader:
-            outfiles[row['id']] = [row['title'], replaceKeys(template, row)]
-            if row["id"] in content:
-                outfiles[row['id']][1] = outfiles[row['id']][1].replace('<!--#+BEGIN: items-->',
-                                                              ''.join(content[row['id']]))
+            outfiles[row['id']] = [row['title'], template.render_unicode(**row)]
 
         for file_id, file_array in outfiles.items():
             with open(o_path + '/' + file_array[0].replace('/', '_') + '.html', 'w') as f:
                 f.write(file_array[1])
-
-    #print(main_data_vars)
-
-def replaceKeys(template, data_dict):
-    for key, value in data_dict.items():
-        template = template.replace('{' + key + '}', value)
-    return template
 
 if __name__ == __name__:
     parser = argparse.ArgumentParser(description='Fill templated based off spreadsheets.')
