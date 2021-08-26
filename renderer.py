@@ -13,7 +13,7 @@ def main(t_file, m_file, i_files, o_path):
     content = {}
 
     for item in i_files:
-        prog = re.compile(r'(?<=<!--BEGIN:items-->).+(?=<!--END:items-->)', flags=re.I|re.M|re.S)
+        prog = re.compile(r'(?<=<!--#\+BEGIN:\sitems-->).+(?=<!--#\+END:\sitems-->)', flags=re.I|re.M|re.S)
         match = prog.search(template)
         if match:
             template = prog.sub(' ', template)
@@ -36,7 +36,7 @@ def main(t_file, m_file, i_files, o_path):
         for row in reader:
             outfiles[row['id']] = [row['title'], replaceKeys(template, row)]
             if row["id"] in content:
-                outfiles[row['id']][1] = outfiles[row['id']][1].replace('<!--BEGIN:items-->',
+                outfiles[row['id']][1] = outfiles[row['id']][1].replace('<!--#+BEGIN: items-->',
                                                               ''.join(content[row['id']]))
 
         for file_id, file_array in outfiles.items():
