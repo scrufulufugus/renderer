@@ -36,7 +36,7 @@ def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
 class DictMap(dict):
     __getattr__ = dict.get
 
-if __name__ == __name__:
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Fill template based off spreadsheets.')
     parser.add_argument('-t', '--template', dest='template', required=True)
     parser.add_argument('-m', '--main-data', dest='main', required=True)
