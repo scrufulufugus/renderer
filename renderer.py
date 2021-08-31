@@ -11,7 +11,7 @@ def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
 
     context_tree = {}
 
-    with open(m_file, 'r') as f:
+    with open(m_file, 'r', errors="replace") as f:
         reader = csv.DictReader(f, delimiter=',', quotechar='"')
         for row in reader:
             context_tree[row[id_col]] = row
@@ -19,7 +19,7 @@ def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
                 context_tree[row[id_col]][item] = []
 
     for item, filename in i_files.items():
-        with open(filename) as f:
+        with open(filename, 'r', errors="replace") as f:
             reader = csv.DictReader(f, delimiter=',', quotechar='"')
             for row in reader:
                 if row[id_col] in context_tree.keys():
