@@ -15,16 +15,15 @@ def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
         reader = csv.DictReader(f, delimiter=',', quotechar='"')
         for row in reader:
             context_tree[row[id_col]] = row
+            for item in i_files.keys():
+                context_tree[row[id_col]][item] = []
 
     for item, filename in i_files.items():
         with open(filename) as f:
             reader = csv.DictReader(f, delimiter=',', quotechar='"')
             for row in reader:
                 if row[id_col] in context_tree.keys():
-                    if item in context_tree[row[id_col]].keys():
-                        context_tree[row[id_col]][item].append(DictMap(row))
-                    else:
-                        context_tree[row[id_col]][item] = [DictMap(row)]
+                    context_tree[row[id_col]][item].append(DictMap(row))
 
     out_files = {}
     for row in context_tree.values():
