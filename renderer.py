@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os.path as path
-import re
 import sys
 import argparse
 import csv
@@ -23,9 +22,9 @@ def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
             for row in reader:
                 if row[id_col] in context_tree.keys():
                     if item in context_tree[row[id_col]].keys():
-                        context_tree[row[id_col]][item].append(row)
+                        context_tree[row[id_col]][item].append(DictMap(row))
                     else:
-                        context_tree[row[id_col]][item] = [row]
+                        context_tree[row[id_col]][item] = [DictMap(row)]
 
     out_files = {}
     for row in context_tree.values():
@@ -35,8 +34,8 @@ def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
         with open(o_path + '/' + filename.replace('/', '_') + '.html', 'w') as f:
             f.write(contents)
 
-def parse_items(i_files, context):
-    pass
+class DictMap(dict):
+    __getattr__ = dict.get
 
 if __name__ == __name__:
     parser = argparse.ArgumentParser(description='Fill template based off spreadsheets.')
