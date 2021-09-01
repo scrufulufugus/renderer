@@ -19,10 +19,47 @@ This file is part of renderer.
 """
 
 import os.path as path
+from io import IOBase
 import sys
 import argparse
 import csv
 from mako.template import Template
+
+class TemplateRenderer(object):
+    def __init__(self, template: str, main_data: IOBase, items: dict):
+        self.template = Template(template, format_exceptions=True)
+
+        self.main_data = csv.DictReader(main_data, dialect=self.checkCSV(main_data))
+        self.items_data = {}
+        for key, item in items.items():
+            self.items_data[key] = csv.DictReader(item, dialect=self.checkCSV(item))
+
+    def checkCSV(self, csv_io: IOBase) -> csv.Dialect:
+        dialect = csv.Sniffer().sniff(csv_io.read(1024))
+        csv_io.seek(0)
+        return dialect
+
+    def render(self, **kwargs) -> dict:
+        self.id_col = kwargs.get("id", "id")
+        self.title_col = kwargs.get("title", "title")
+
+        context_tree = {}
+
+        for row in self.main_data:
+            context_tree[row[self.id_col]] = row
+            for item in self.items_data.keys():
+                context_tree[row[self.id_col]][item] = []
+
+        for item, reader in self.items_data.items():
+            for row in reader:
+                if row[self.id_col] in context_tree.keys():
+                    context_tree[row[self.id_col]][item].append(DictMap(row))
+
+        out_files = {}
+        for row in context_tree.values():
+            out_files[row[self.title_col]] = self.template.render_unicode(**row)
+
+        return out_files
 
 def main(t_file, m_file, i_files, o_path, id_col="id", title_col="title"):
     template = Template(filename=t_file, format_exceptions=True)
@@ -62,10 +99,16 @@ if __name__ == "__main__":
     parser.add_argument('-i', '--item-data', dest='items', nargs=2, action='append', default=[])
     args = parser.parse_args()
 
-    if not path.isfile(args.template):
+    if path.isfile(args.template):
+        f = open(args.template, 'r')
+        template = f.read()
+        f.close()
+    else:
         print("Invalid template: {}".format(args.template))
         sys.exit(2)
-    if not path.isfile(args.main):
+    if path.isfile(args.main):
+        main_file = open(args.main, 'r', errors='replace')
+    else:
         print("Invalid main: {}".format(args.main))
         sys.exit(2)
     if not path.isdir(args.out):
@@ -79,7 +122,10 @@ if __name__ == "__main__":
         if item[0] in items.keys():
             print("Duplicate item: {}".format(item[0]))
             sys.exit(2)
-        items[item[0]] = path.abspath(item[1])
+        items[item[0]] = open(item[1], 'r', errors='replace')
 
-    main(path.abspath(args.template), path.abspath(args.main),
-         items, path.abspath(args.out))
+    renderer = TemplateRenderer(template, main_file, items)
+    out_files = renderer.render()
+    for filename, contents in out_files.items():
+        with open(args.out + '/' + filename.replace('/', '_') + '.html', 'w') as f:
+            f.write(contents)
