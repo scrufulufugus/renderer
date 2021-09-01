@@ -126,6 +126,9 @@ if __name__ == "__main__":
 
     renderer = TemplateRenderer(template, main_file, items)
     out_files = renderer.render()
+    main_file.close()
+    for item in items.values():
+        item.close()
     for filename, contents in out_files.items():
         with open(args.out + '/' + filename.replace('/', '_') + '.html', 'w') as f:
             f.write(contents)
