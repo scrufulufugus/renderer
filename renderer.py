@@ -80,7 +80,7 @@ if __name__ == "__main__":
         print("Invalid template: {}".format(args.template))
         sys.exit(2)
     if path.isfile(args.main):
-        main_file = open(args.main, 'r', errors='replace')
+        main_file = open(args.main, 'r', errors='replace', encoding='utf-8')
     else:
         print("Invalid main: {}".format(args.main))
         sys.exit(2)
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         if item[0] in items.keys():
             print("Duplicate item: {}".format(item[0]))
             sys.exit(2)
-        items[item[0]] = open(item[1], 'r', errors='replace')
+        items[item[0]] = open(item[1], 'r', errors='replace', encoding='utf-8')
 
     renderer = TemplateRenderer(template, main_file, items)
     out_files = renderer.render()
@@ -103,5 +103,5 @@ if __name__ == "__main__":
     for item in items.values():
         item.close()
     for filename, contents in out_files.items():
-        with open(args.out + '/' + filename.replace('/', '_') + '.html', 'w') as f:
+        with open(args.out + '/' + filename.replace('/', '_') + '.html', 'w', encoding='utf-8') as f:
             f.write(contents)
