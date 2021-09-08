@@ -76,6 +76,7 @@ class MainDialog(QMainWindow):
 
     def runRender(self):
         self.ui.runButton.setEnabled(False)
+        self.ui.errorBox.setText('')
         try:
             with open(self.template_file, 'r', errors='replace', encoding='utf-8') as f:
                 template = f.read()
@@ -91,12 +92,14 @@ class MainDialog(QMainWindow):
                 filename = re.sub(r'^\s+|\s+$', '', filename)
                 with open(self.output_dir + '/' + filename + '.html', 'w', encoding='utf-8') as f:
                     f.write(contents)
+                    self.appendMessage("Wrote " + filename + '.html')
         except Exception as e:
             self.appendMessage(e.__str__(), True)
         self.ui.runButton.setEnabled(True)
 
     def appendMessage(self, message: str, is_error=False):
-        self.ui.errorBox.setText(message)
+        current_text = self.ui.errorBox.toPlainText()
+        self.ui.errorBox.setText(current_text + "\n" + message)
         self.ui.errorBox.show()
 
 if __name__ == "__main__":
