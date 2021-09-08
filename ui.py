@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'app.ui'
+# Form implementation generated from reading ui file 'main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -32,7 +32,7 @@ class Ui_MainWindow(object):
         self.mainSelectButton = QtWidgets.QPushButton(self.mainGroupBox)
         self.mainSelectButton.setObjectName("mainSelectButton")
         self.horizontalLayout_3.addWidget(self.mainSelectButton)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem)
         self.idComboBox = QtWidgets.QComboBox(self.mainGroupBox)
         self.idComboBox.setEnabled(False)
@@ -57,7 +57,7 @@ class Ui_MainWindow(object):
         self.itemSelectButton = QtWidgets.QPushButton(self.itemGroupBox)
         self.itemSelectButton.setObjectName("itemSelectButton")
         self.horizontalLayout.addWidget(self.itemSelectButton)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.itemName = QtWidgets.QLineEdit(self.itemGroupBox)
         self.itemName.setEnabled(False)
@@ -96,6 +96,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_4)
         self.verticalLayout_5.addWidget(self.outputGroupBox)
         self.runButton = QtWidgets.QPushButton(self.centralwidget)
+        self.runButton.setEnabled(False)
         self.runButton.setObjectName("runButton")
         self.verticalLayout_5.addWidget(self.runButton)
         self.errorBox = QtWidgets.QTextBrowser(self.centralwidget)
