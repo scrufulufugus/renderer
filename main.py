@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import sys
+import re
 import os.path as path
 
 class MainDialog(QMainWindow):
@@ -86,7 +87,9 @@ class MainDialog(QMainWindow):
             item_data.close()
 
             for filename, contents in out_files.items():
-                with open(self.output_dir + '/' + filename.replace('/', '_') + '.html', 'w', encoding='utf-8') as f:
+                filename = re.sub(r'[\<\>\:\"\/\\\|\?\*\.]', '_', filename.encode('ascii', 'ignore').decode('ascii'))
+                filename = re.sub(r'^\s+|\s+$', '', filename)
+                with open(self.output_dir + '/' + filename + '.html', 'w', encoding='utf-8') as f:
                     f.write(contents)
         except Exception as e:
             self.appendMessage(e.__str__(), True)

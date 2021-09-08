@@ -23,6 +23,7 @@ from io import IOBase
 import sys
 import argparse
 import csv
+import re
 from mako.template import Template
 
 class TemplateRenderer(object):
@@ -103,5 +104,7 @@ if __name__ == "__main__":
     for item in items.values():
         item.close()
     for filename, contents in out_files.items():
-        with open(args.out + '/' + filename.replace('/', '_') + '.html', 'w', encoding='utf-8') as f:
+        filename = re.sub(r'[\<\>\:\"\/\\\|\?\*\.]', '_', filename.encode('ascii', 'ignore').decode('ascii'))
+        filename = re.sub(r'^\s+|\s+$', '', filename)
+        with open(args.out + '/' + filename + '.html', 'w', encoding='utf-8') as f:
             f.write(contents)
