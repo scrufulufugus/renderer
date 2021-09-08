@@ -30,6 +30,7 @@ class MainDialog(QMainWindow):
         self.ui.templateSelectButton.clicked.connect(self.selectTemplate)
         self.ui.saveSelectButton.clicked.connect(self.selectOutputDir)
         self.ui.runButton.clicked.connect(self.runRender)
+        self.ui.runButton.setEnabled(True) # TODO: Replace with handling of filled fields
 
     def selectMainFile(self):
         sender = self.sender()
@@ -73,18 +74,27 @@ class MainDialog(QMainWindow):
         return QFileDialog.getExistingDirectory(self, reason, "", options=QFileDialog.ShowDirsOnly)
 
     def runRender(self):
-        with open(self.template_file, 'r', errors='replace', encoding='utf-8') as f:
-            template = f.read()
-        main_data = open(self.main_file, 'r', errors='replace', encoding='utf-8')
-        item_data = open(self.item_file, 'r', errors='replace', encoding='utf-8')
-        self.renderer = TemplateRenderer(template, main_data, {self.item_name : item_data})
-        out_files = self.renderer.render()
-        main_data.close()
-        item_data.close()
+        self.ui.runButton.setEnabled(False)
+        try:
+            with open(self.template_file, 'r', errors='replace', encoding='utf-8') as f:
+                template = f.read()
+            main_data = open(self.main_file, 'r', errors='replace', encoding='utf-8')
+            item_data = open(self.item_file, 'r', errors='replace', encoding='utf-8')
+            self.renderer = TemplateRenderer(template, main_data, {self.item_name : item_data})
+            out_files = self.renderer.render()
+            main_data.close()
+            item_data.close()
 
-        for filename, contents in out_files.items():
-            with open(self.output_dir + '/' + filename.replace('/', '_') + '.html', 'w', encoding='utf-8') as f:
-                f.write(contents)
+            for filename, contents in out_files.items():
+                with open(self.output_dir + '/' + filename.replace('/', '_') + '.html', 'w', encoding='utf-8') as f:
+                    f.write(contents)
+        except Exception as e:
+            self.appendMessage(e.__str__(), True)
+        self.ui.runButton.setEnabled(True)
+
+    def appendMessage(self, message: str, is_error=False):
+        self.ui.errorBox.setText(message)
+        self.ui.errorBox.show()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
