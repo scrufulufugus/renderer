@@ -78,10 +78,10 @@ class MainDialog(QMainWindow):
         self.ui.runButton.setEnabled(False)
         self.ui.errorBox.setText('')
         try:
-            with open(self.template_file, 'r', errors='replace', encoding='utf-8') as f:
+            with open(self.template_file, 'r', errors='ignore', encoding='utf-8') as f:
                 template = f.read()
-            main_data = open(self.main_file, 'r', errors='replace', encoding='utf-8')
-            item_data = open(self.item_file, 'r', errors='replace', encoding='utf-8')
+            main_data = open(self.main_file, 'r', errors='ignore', encoding='utf-8')
+            item_data = open(self.item_file, 'r', errors='ignore', encoding='utf-8')
             self.renderer = TemplateRenderer(template, main_data, {self.item_name : item_data})
             out_files = self.renderer.render()
             main_data.close()
