@@ -18,7 +18,7 @@
     <item>
      <widget class="QGroupBox" name="mainGroupBox">
       <property name="title">
-       <string>Main Data</string>
+       <string>Primary Spreadsheet</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -38,16 +38,16 @@
           </widget>
          </item>
          <item>
-          <spacer name="mainSpacer">
+          <spacer name="horizontalSpacer_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::MinimumExpanding</enum>
+            <enum>QSizePolicy::Minimum</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>10</width>
              <height>20</height>
             </size>
            </property>
@@ -58,12 +58,18 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="placeholderText">
+            <string>Select ID Column</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QComboBox" name="titleComboBox">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="placeholderText">
+            <string>Select Title Column</string>
            </property>
           </widget>
          </item>
@@ -75,7 +81,7 @@
     <item>
      <widget class="QGroupBox" name="itemGroupBox">
       <property name="title">
-       <string>Item Data</string>
+       <string>Secondary Spreadsheet</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -95,16 +101,16 @@
           </widget>
          </item>
          <item>
-          <spacer name="itemSpacer">
+          <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::MinimumExpanding</enum>
+            <enum>QSizePolicy::Minimum</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>10</width>
              <height>20</height>
             </size>
            </property>
@@ -114,6 +120,12 @@
           <widget class="QLineEdit" name="itemName">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
           </widget>
          </item>
@@ -125,7 +137,7 @@
     <item>
      <widget class="QGroupBox" name="templateGroupBox">
       <property name="title">
-       <string>Template</string>
+       <string>Template File</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -152,7 +164,7 @@
     <item>
      <widget class="QGroupBox" name="outputGroupBox">
       <property name="title">
-       <string>Output</string>
+       <string>Output Location</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
