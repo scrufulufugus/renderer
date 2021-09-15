@@ -28,7 +28,7 @@ from mako.template import Template
 
 class TemplateRenderer(object):
     def __init__(self, template: str, main_data: IOBase, items: dict):
-        self.template = Template(template, format_exceptions=True)
+        self.template = Template(template)
 
         self.main_data = csv.DictReader(main_data, dialect=self.checkCSV(main_data))
         self.items_data = {}

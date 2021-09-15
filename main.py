@@ -90,6 +90,8 @@ class MainDialog(QMainWindow):
             for filename, contents in out_files.items():
                 filename = re.sub(r'[\<\>\:\"\/\\\|\?\*\.]', '_', filename.encode('ascii', 'ignore').decode('ascii'))
                 filename = re.sub(r'^\s+|\s+$', '', filename)
+                if self.output_dir == "":
+                    raise OSError(2, "No such file or directory: ''")
                 with open(self.output_dir + '/' + filename + '.html', 'w', encoding='utf-8') as f:
                     f.write(contents)
                     self.appendMessage("Wrote " + filename + '.html')
